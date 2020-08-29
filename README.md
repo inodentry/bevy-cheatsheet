@@ -10,7 +10,7 @@ If you like this, you should also have a look at the [Bevy Cookbook](https://git
 
 ## Contribution guidelines
 
-Contributions, especially to correct mistakes or to better follow these guidelines, are always welcome.
+Contributions to improve the cheatsheet are always welcome.
 
 Keep everything self-contained in one document. It shall not be fragmented.
 
