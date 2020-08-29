@@ -1,6 +1,6 @@
 # Bevy Cheatsheet
 
-Concise cheat sheet to show the exact syntax for common features and programming patterns in the Bevy game engine.
+Concise cheat sheet to show the exact syntax for common features and programming patterns in the [Bevy game engine](https://github.com/bevyengine/bevy).
 
 Please help improve it and keep it up to date by contributing on [GitHub](https://github.com/jamadazi/bevy-cheatsheet).
 
