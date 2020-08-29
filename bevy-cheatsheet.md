@@ -4,6 +4,8 @@ Concise cheat sheet to show the exact syntax for common features and programming
 
 Please help improve it and keep it up to date by contributing on [GitHub](https://github.com/jamadazi/bevy-cheatsheet).
 
+If you like this, you should also have a look at the [Bevy Cookbook](https://github.com/jamadazi/bevy-cookbook).
+
 ## Entities
 
 Conceptually, an "object" in the game.
