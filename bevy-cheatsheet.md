@@ -200,6 +200,7 @@ fn setup(commands: Commands, server: Res<AssetServer>) {
 ## Useful built-in resources
 
  - `AssetServer`: use to load assets from disk
+ - `Input<KeyCode>`, `Input<MouseButton>`: to check if keys/buttons are pressed
  - `Time`: frame delta time and overall running time
  - `Windows`: parameters of the open windows, such as dimensions
 
