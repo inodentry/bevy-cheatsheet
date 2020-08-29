@@ -121,7 +121,7 @@ fn manager_system(mut cmd: Commands, data: Res<MyRes>, mut q: Query<(Entity, &St
 
 Special kind of system to offer simpler syntax for iterating over a single query. Can still have resources and commands.
 
-The query is handled internally by Bevy and the system is called for each entity with the given compoents.
+The query is handled internally by Bevy and the system is called for each entity with the given components.
 
 You must use `Mut<T>` instead of `&mut T`.
 
