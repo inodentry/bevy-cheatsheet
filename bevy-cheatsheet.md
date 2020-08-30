@@ -58,17 +58,22 @@ Used to operate on game state by accessing components and resources.
 
 They need to be registered at `App` creation time. 
 
+*Note*: Bevy requires a specific ordering for the `fn` arguments: `Commands` first, followed by resources, followed by queries or components last.
+
 ## Queries
 
 Queries allow you to operate on entities with a given set of components.
 
-## Example system
+You can get mutable/immutable access to specific components.
+
+You can filter based on presence/absence of a component type, using `With<T, ...>`/`Without<T, ...>`.
 
 ```rust
 fn my_complex_system(
-    // due to syntax limitations, resources must come before queries
+    // resources must come before queries
     r1: Res<MyRes>,
     mut r2: ResMut<MyOtherRes>,
+
     // queries must be defined as `mut`, even if the components themselves are not
     mut q1: Query<(&ComponentA, &ComponentB)>,
     // use `Entity` to get the entity ID
@@ -97,7 +102,7 @@ fn my_complex_system(
 
 ## Commands
 
-Spawn and despawn entities, add/remove components, insert resources, using a `Commands` parameter. Syntax limitations: must come first.
+Spawn and despawn entities, add/remove components, insert resources, using `Commands`. If used, must be the first argument of the `fn`.
 
 ```rust
 fn manager_system(mut cmd: Commands, data: Res<MyRes>, mut q: Query<(Entity, &Stuff)>) {
