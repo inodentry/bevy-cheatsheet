@@ -222,6 +222,26 @@ fn setup(commands: Commands, server: Res<AssetServer>) {
 }
 ```
 
+## Hierarchical Entities
+
+Entities can be nested into parent/child hierarchies.
+
+```rust
+// spawn entity with a child
+let e = commands
+.spawn(MyParentComponents::default())
+.with_children(|parent| {
+    parent.spawn(MyChildComponents::default());
+});
+
+// despawn entity together with its children
+commands.despawn_recursive(entity);
+```
+
+The parent entity will have a `Children` component, which contains the entity ids of its children.
+
+The children will have a `Parent` component, which holds the entity id of its parent.
+
 ## Useful built-in resources
 
  - `AssetServer`: use to load assets from disk
