@@ -81,19 +81,24 @@ fn my_complex_system(
     // only get entities that have a `Foo` component
     mut q3: Query<With<Foo, (&Bar, &mut Baz)>>,
     // only get entities without a `Abc` component
-    mut q3: Query<Without<Abc, (&mut Def, Entity)>>,
+    mut q4: Query<Without<Abc, (&mut Def, Entity)>>,
 ) {
     // iterate over all matching entities
     for (mut a, b) in &mut q1.iter() {
-    	// `a` and `b` are special wrapper types that deref to the actual components
-	*a = ComponentA::new();
+        // `a` and `b` are special wrapper types that deref to the actual components
+        *a = ComponentA::new();
+    }
 
-	let e = b.some_method_that_returns_entity_id();
+    // or just one specific entity
+    if let Ok(query_one) = q3.entity(my_entity) {
+        if let Some((bar, mut baz)) = query_one.get() {
+            // do stuff with my_entity's Bar and Baz
+        }
+    }
 
-	// operate on a component of a specific entity
-	if let Ok(mut c) = q2.get_mut::<ComponentC>(e) {
-	   // do stuff with e's ComponentC
-	}
+    // or just one component of a specific entity
+    if let Ok(mut c) = q2.get_mut::<ComponentC>(my_entity) {
+        // do stuff with e's ComponentC
     }
 }
 ```
@@ -194,7 +199,7 @@ fn main() {
         .add_startup_system(my_setup_system.system())
         // runs each frame
         .add_system(my_game_system.system())
-	.run();
+        .run();
 }
 ```
 
