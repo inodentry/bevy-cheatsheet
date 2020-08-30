@@ -82,8 +82,6 @@ fn my_complex_system(
     mut q3: Query<With<Foo, (&Bar, &mut Baz)>>,
     // only get entities without a `Abc` component
     mut q3: Query<Without<Abc, (&mut Def, Entity)>>,
-    // only entities whose `Qux` component was mutated by another system this frame
-    mut q4: Query<(Mutated<Qux>, &OtherData)>,
 ) {
     // iterate over all matching entities
     for (mut a, b) in &mut q1.iter() {
@@ -96,6 +94,26 @@ fn my_complex_system(
 	if let Ok(mut c) = q2.get_mut::<ComponentC>(e) {
 	   // do stuff with e's ComponentC
 	}
+    }
+}
+```
+
+## Change detection
+
+Special queries can be used to check if components have been modified by other systems this frame.
+
+```rust
+fn change_tracking_system(
+    // only entities whose `Qux` component was mutated by another system this frame
+    mut q1: Query<(Mutated<Qux>, &OtherData)>,
+    // only entities whose `Thing` component was freshly added
+    mut q2: Query<(Added<Thing>, &OtherData)>,
+    // either added or mutated
+    mut q3: Query<(Changed<Stuff>, &OtherData)>,
+) {
+    // to detect removals, use this method (there is no query type for removed)
+    for entity in q3.removed::<AnotherComponent>() {
+        // do something with each `q3` entity that lost its `AnotherComponent`
     }
 }
 ```
