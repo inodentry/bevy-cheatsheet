@@ -249,6 +249,14 @@ The children will have a `Parent` component, which holds the entity id of its pa
  - `Time`: frame delta time and overall running time
  - `Windows`: parameters of the open windows, such as dimensions
 
+### Configuration resources
+
+These built-in resources can be added when building your `App`, to configure various things:
+
+ - `ClearColor`: set the clear color (background color)
+ - `Msaa`: enable Multi-Sample Anti-Aliasing
+ - `WindowDescriptor`: change parameters of the main window
+
 ## Useful built-in events
 
  - Input devices: `KeyboardInput`, `CursorMoved`, `MouseMotion`, `MouseButtonInput`, `MouseWheel`.
