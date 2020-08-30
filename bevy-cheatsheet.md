@@ -242,6 +242,8 @@ The parent entity will have a `Children` component, which contains the entity id
 
 The children will have a `Parent` component, which holds the entity id of its parent.
 
+If the entities have `Transform`s, the child's `Transform` becomes relative to the parent's.
+
 ## Useful built-in resources
 
  - `AssetServer`: use to load assets from disk
