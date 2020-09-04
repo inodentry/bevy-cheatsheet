@@ -31,6 +31,8 @@ Empty (zero-sized) structs can be used as "marker components" to identify/tag en
 struct EmptyMarker;
 ```
 
+Components are identified by their type; an entity cannot have more than one instance of the same component type. If you need more, you can wrap them in newtype structs, to create unique types.
+
 ## Component Bundles
 
 Components can be grouped into bundles to make it easy to spawn an entity with a common set of components.
@@ -50,7 +52,9 @@ Akin to "global variables", used to hold data independent of entities.
 
 Defined as simple Rust structs. Accessed using `Res`/`ResMut` parameters.
 
-### Initialization
+Resources are identified by their type; there cannot be more than one resource of the same type. If you need more, you can wrap them in newtype structs, to create unique types.
+
+### Resource Initialization
 
 You can initialize your resources with `FromResources`:
 
@@ -220,8 +224,10 @@ To enter the bevy runtime, you must build an `App`, register any plugins, events
 fn main() {
     App::build().add_default_plugins()
         .add_event::<MyEvent>()
+        // construct a value for the MyRes1 resource
         .add_resource::<MyRes1>(MyRes1::new())
-        .init_resource::<MyRes2>() // if it implements `Default`
+        // if it implements `Default` or `FromResources`
+        .init_resource::<MyRes2>()
         // runs once at startup, before normal systems
         .add_startup_system(my_setup_system.system())
         // runs each frame
@@ -254,6 +260,8 @@ fn setup(commands: Commands, server: Res<AssetServer>) {
 }
 ```
 
+You can also add values directly to the `Assets<T>` storage and bypass the `AssetServer`, if you have loaded/generated them in another way.
+
 ## Hierarchical Entities
 
 Entities can be nested into parent/child hierarchies.
@@ -270,11 +278,11 @@ let e = commands
 commands.despawn_recursive(entity);
 ```
 
-The parent entity will have a `Children` component, which contains the entity ids of its children.
+The parent entity will have a `Children` component, which contains the entity ids of the children.
 
-The children will have a `Parent` component, which holds the entity id of its parent.
+The children will have a `Parent` component, which holds the entity id of the parent.
 
-If the entities have `Transform`s, the child's `Transform` becomes relative to the parent's.
+If the entities have `Transform`s, the child's `Transform` is relative to the parent's.
 
 ## Useful built-in resources
 
