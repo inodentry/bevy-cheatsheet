@@ -50,7 +50,9 @@ Akin to "global variables", used to hold data independent of entities.
 
 Defined as simple Rust structs. Accessed using `Res`/`ResMut` parameters.
 
-A good way to initialize your resources is with `FromResources`:
+### Initialization
+
+You can initialize your resources with `FromResources`:
 
 ```rust
 struct MyFancyResource { /* stuff */ }
@@ -66,6 +68,12 @@ impl FromResources for MyFancyResource {
     }
 }
 ```
+
+If you don't need access to other resources, you can instead `impl Default`.
+
+You can also construct your value in your `fn main` and add it via the `App` builder.
+
+You can also insert resources from a startup system, using `Commands`.
 
 ## Systems
 
