@@ -125,7 +125,9 @@ fn change_tracking_system(
 
 ## Commands
 
-Spawn and despawn entities, add/remove components, insert resources, using `Commands`. If used, must be the first argument of the `fn`.
+Spawn and despawn entities, add/remove components, insert resources, using `Commands`.
+
+Must be the first argument of the `fn`.
 
 ```rust
 fn manager_system(mut cmd: Commands, data: Res<MyRes>, mut q: Query<(Entity, &Stuff)>) {
