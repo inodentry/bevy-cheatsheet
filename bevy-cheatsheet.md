@@ -50,6 +50,23 @@ Akin to "global variables", used to hold data independent of entities.
 
 Defined as simple Rust structs. Accessed using `Res`/`ResMut` parameters.
 
+A convenient way to initialize non-trivial resources is with `FromResources`:
+
+```rust
+struct MyFancyResource { /* stuff */ }
+
+impl FromResources for MyFancyResource {
+    fn from_resources(resources: &Resources) -> Self {
+        // you have full access to any other resources you need here,
+        // you can even mutate them:
+        let mut x = resources.get_mut::<MyOtherResource>().unwrap();
+        x.do_mut_stuff();
+
+        MyFancyResource { /* stuff */ }
+    }
+}
+```
+
 ## Systems
 
 Systems are regular rust functions that take special types as arguments.
