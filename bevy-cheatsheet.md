@@ -199,6 +199,18 @@ You must use `Mut<T>` instead of `&mut T`.
 fn my_system(a: &ComponentA, b: Mut<ComponentB>) { /* do stuff */ }
 ```
 
+## Local Resources
+
+You can have per-system data using `Local<T>`.
+
+```rust
+fn my_system(data: Local<MyData>) { }
+```
+
+`T` must implement `Default` or `FromResources`, as it needs to be automatically initialized.
+
+If the same type is used in multiple systems, they will each get their own instance.
+
 ## Events
 
 Send notifications between systems. Per frame, any events not handled are dropped by the next frame. Accessed using a `Events<T>` resource.
