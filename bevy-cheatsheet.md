@@ -245,6 +245,29 @@ fn main() {
 }
 ```
 
+## Plugins
+
+As your app grows, it can be useful to make it more modular. You can split it into plugins:
+
+```rust
+struct MyPlugin;
+
+impl Plugin for MyPlugin {
+    fn build(&self, app: &mut AppBuilder) {
+        // add things to your app here
+        app
+            .add_event::<MyEvent>()
+            .init_resource::<MyRsrc>()
+            .add_system(my_system.system());
+    }
+}
+
+fn main() {
+    App::build().add_default_plugins()
+        .add_plugin::<MyPlugin>();
+}
+```
+
 ## Assets
 
 `Assets<T>` resources store the actual data. They are indexed using `Handle<T>`s, which are lightweight IDs for individual loaded assets. The `AssetServer` resource handles loading of assets into the engine.
