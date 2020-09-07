@@ -73,7 +73,16 @@ impl FromResources for MyFancyResource {
 }
 ```
 
-If you don't need access to other resources, you can instead `impl Default`.
+If you don't need access to other resources, you can instead implement or derive `Default`:
+
+```rust
+#[derive(Default)]
+struct SimpleResource {
+    float: f32,
+    opt: Option<f32>,
+    v: Vec<f32>,
+}
+```
 
 You can also construct your value in your `fn main` and add it via the `App` builder.
 
@@ -201,11 +210,11 @@ Must be registered when constructing the `App`.
 ```rust
 struct MyEvent;
 
-struct MyResource {
+struct MyState {
     reader: EventReader<MyEvent>,
 }
 
-fn my_recv_system(mut state: ResMut<MyResource>, events: Res<Events<MyEvent>>) {
+fn my_recv_system(mut state: ResMut<MyState>, events: Res<Events<MyEvent>>) {
     for ev in state.reader.iter(&events) {
         // do something with `ev`
     }
