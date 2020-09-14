@@ -373,6 +373,12 @@ These built-in resources can be added when building your `App`, to configure var
  - `TextureAtlas`: spritesheet
  - `Mesh`: 3d geometry
 
+## Useful built-in systems
+
+Systems that come with bevy, but are not enabled by default. Add them to your App if you want them.
+
+ - `bevy::input::system::exit_on_esc_system`: quit the app when pressing the Esc key.
+
 ## Syntax tricks
 
 To work around limitations on the number of parameters, they can be arbitrarily nested in tuples:
