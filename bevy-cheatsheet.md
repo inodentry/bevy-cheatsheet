@@ -326,7 +326,13 @@ The parent entity will have a `Children` component, which contains the entity id
 
 The children will have a `Parent` component, which holds the entity id of the parent.
 
-If the entities have `Transform`s, the child's `Transform` is relative to the parent's.
+### Hierarchical Transforms
+
+To use transforms with hierarchical entities, you must add both a `GlobalTransform` and a `Transform` component.
+
+The `GlobalTransform` will be managed by bevy internally.
+
+The `Transform` is your local transform. For the children, it is relative to the parent.
 
 ## Useful built-in resources
 
