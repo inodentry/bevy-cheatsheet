@@ -106,6 +106,8 @@ You can get mutable/immutable access to specific components.
 
 You can filter based on presence/absence of a component type, using `With<T, ...>`/`Without<T, ...>`.
 
+You can also use `Option` as an adapter to get a component if it exists.
+
 ```rust
 fn my_complex_system(
     // resources must come before queries
@@ -113,13 +115,19 @@ fn my_complex_system(
     mut r2: ResMut<MyOtherRes>,
 
     // queries must be defined as `mut`, even if the components themselves are not
-    mut q1: Query<(&ComponentA, &ComponentB)>,
+    mut q1: Query<(&mut ComponentA, &ComponentB)>,
+
     // use `Entity` to get the entity ID
     mut q2: Query<(Entity, &mut ComponentC)>,
+
     // only get entities that have a `Foo` component
     mut q3: Query<With<Foo, (&Bar, &mut Baz)>>,
+
     // only get entities without a `Abc` component
     mut q4: Query<Without<Abc, (&mut Def, Entity)>>,
+
+    // optionally get access to `Cde` if it exists on entities that have `Bcd`
+    mut q5: Query<(&Bcd, Option<&mut Cde>)>,
 ) {
     // iterate over all matching entities
     for (mut a, b) in &mut q1.iter() {
