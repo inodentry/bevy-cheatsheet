@@ -153,6 +153,8 @@ fn my_complex_system(
 
 Special queries can be used to check if components have been modified by other systems this frame.
 
+Note that the various types of change detection only allow for immutable access.
+
 ```rust
 fn change_tracking_system(
     // only entities whose `Qux` component was mutated by another system this frame
@@ -166,6 +168,26 @@ fn change_tracking_system(
     for entity in q3.removed::<AnotherComponent>() {
         // do something with each `q3` entity that lost its `AnotherComponent`
     }
+}
+```
+
+To watch for changes on multiple components:
+
+```rust
+// all of them (logical AND)
+Query<(Mutated<Abc>, Mutated<Bcd>)>
+// any of them (logical OR)
+Query<Or<(Mutated<Cde>, Mutated<Def>)>>
+// complex
+Query<(Mutated<Foo>, Or<(Mutated<Xy>, Mutated<Yx>)>)>
+```
+
+Resources also have basic change detection using `ChangedRes<T>`:
+
+```rust
+// the whole system only runs if the resource was changed
+fn res_changed_system(my_res: ChangedRes<MyRes>) {
+    eprintln!("Resource changed to {:?}", *my_res);
 }
 ```
 
