@@ -243,21 +243,17 @@ If the same type is used in multiple systems, they will each get their own insta
 
 ## Events
 
-Send notifications between systems. Per frame, any events not handled are dropped by the next frame. Accessed using a `Events<T>` resource.
+Send notifications between systems. Accessed using a `Events<T>` resource.
 
-To read, you need an `EventReader<T>`. It tracks the events processed. It can be placed in your own resources, to have multiple, so different systems can each handle the same events.
+To receive, you need an `EventReader<T>`. It tracks the events processed. It's nice to have it as a `Local` resource.
 
-Must be registered when constructing the `App`.
+Events don't persist. If receivers don't handle them every frame, they will be lost.
 
 ```rust
 struct MyEvent;
 
-struct MyState {
-    reader: EventReader<MyEvent>,
-}
-
-fn my_recv_system(mut state: ResMut<MyState>, events: Res<Events<MyEvent>>) {
-    for ev in state.reader.iter(&events) {
+fn my_recv_system(events: Res<Events<MyEvent>>, mut reader: Local<EventReader<MyEvent>>) {
+    for ev in reader.iter(&events) {
         // do something with `ev`
     }
 }
@@ -266,6 +262,8 @@ fn my_send_system(mut events: ResMut<Events<MyEvent>>) {
     events.send(MyEvent);
 }
 ```
+
+Event types must be registered when building the `App`.
 
 ## App Initialization (main function)
 
