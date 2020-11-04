@@ -130,7 +130,7 @@ fn my_complex_system(
     mut q5: Query<(&Bcd, Option<&mut Cde>)>,
 ) {
     // iterate over all matching entities
-    for (mut a, b) in q1.iter() {
+    for (mut a, b) in q1.iter_mut() {
         // `a` is a special wrapper type (`Mut<T>`) that derefs to the actual component
         *a = ComponentA::new();
     }
