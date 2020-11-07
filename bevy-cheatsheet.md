@@ -230,6 +230,9 @@ fn manager_system(mut cmd: Commands, data: Res<MyRes>, mut q: Query<(Entity, &St
     // tuples are also component bundles
     cmd.spawn((Foo::default(), Bar::default(), data.stuff.clone()));
 
+    // to get the entity id of the last spawned entity:
+    let my_e = cmd.current_entity().unwrap();
+
     for (e, s) in &mut q.iter() {
         if s.is_bad() {
             cmd.despawn(e); // despawn the entity
