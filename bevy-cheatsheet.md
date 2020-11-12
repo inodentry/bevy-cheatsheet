@@ -2,6 +2,10 @@
 
 Concise cheat sheet to show the exact syntax for common features and programming patterns in the [Bevy game engine](https://github.com/bevyengine/bevy).
 
+Primarily covers the current bevy release (v0.3), but new changes in the latest version (git) are also noted where applicable.
+
+This document is maintained on a best-effort basis. Some information may be out of date.
+
 Please help improve it and keep it up to date by contributing on [GitHub](https://github.com/jamadazi/bevy-cheatsheet).
 
 If you like this, you should also have a look at the [Bevy Cookbook](https://github.com/jamadazi/bevy-cookbook).
@@ -96,7 +100,9 @@ Used to operate on game state by accessing components and resources.
 
 They need to be registered at `App` creation time. 
 
-*Note*: Bevy requires a specific ordering for the `fn` arguments: `Commands` first, followed by resources, followed by queries or components last.
+*Note (v0.3)*: Bevy requires a specific ordering for the `fn` arguments: `Commands` first, followed by resources, followed by queries last.
+
+*Note (git)*: The ordering requirement has been removed. System parameters can be in any order now.
 
 ## Queries
 
@@ -147,6 +153,8 @@ fn my_complex_system(
 }
 ```
 
+*Note (git)*: The syntax for `With` and `Without` has changed. See [Query Filters](#query-filters).
+
 ## Conflicting queries
 
 For safety reasons, a system cannot have multiple queries with mutability conflicts on the same components:
@@ -171,6 +179,8 @@ fn my_system(mut qs: QuerySet<(Query<(&mut ComponentA, &ComponentB)>, Query<(&mu
 This ensures that only one of the conflicting queries can be used at the same time.
 
 ## Change detection
+
+*Note (git)*: this syntax has been replaced with [Query Filters](#query-filters).
 
 Special queries can be used to check if components have been modified by other systems this frame.
 
@@ -212,11 +222,35 @@ fn res_changed_system(my_res: ChangedRes<MyRes>) {
 }
 ```
 
+## Query Filters
+
+*Note (v0.3)*: this syntax is not available. See [Change detection](#change-detection) and [Queries](#queries) instead.
+
+The query type is actually `Query<C, F = ()>`, where `C` are the components you want to access, and `F` is a filter, to apply additional restrictions to select what entities should match.
+
+Use tuples to access multiple components and to apply multiple filters.
+
+Examples:
+
+```rust
+// mutable access to Foo, but only if it has changed
+Query<&mut Foo, Changed<Foo>>
+
+// access Bar and Baz, but only if the entity does not have a Foo and its Qux was mutated
+Query<(&Bar, &Baz), (Without<Foo>, Mutated<Qux>)>
+
+// mutably access Abc if the entity has either Def or Fed
+Query<&mut Abc, Or<With<Def>, With<Fed>>>
+
+// regular query with no filter (the filter arg is optional)
+Query<(&DataA, &mut DataB, &DataC)>
+```
+
 ## Commands
 
 Spawn and despawn entities, add/remove components, insert resources, using `Commands`.
 
-Must be the first argument of the `fn`.
+*Note (v0.3)*: Must be the first argument of the `fn`.
 
 ```rust
 fn manager_system(mut cmd: Commands, data: Res<MyRes>, mut q: Query<(Entity, &Stuff)>) {
@@ -241,17 +275,14 @@ fn manager_system(mut cmd: Commands, data: Res<MyRes>, mut q: Query<(Entity, &St
 }
 ```
 
-## For-each systems
+*Note (v0.3)*: The parameter type is `mut cmd: Commands`, as in the example above.
 
-Special kind of system to offer simpler syntax for iterating over a single query. Can still have resources and commands.
+*Note (git)*: The parameter type has changed, you now have two options:
 
-The query is handled internally by Bevy and the system is called for each entity with the given components.
-
-You must use `Mut<T>` instead of `&mut T`.
-
-```rust
-fn my_system(a: &ComponentA, b: Mut<ComponentB>) { /* do stuff */ }
-```
+* `cmd: &mut Commands`: access `Commands` directly, but prevents your system from running in parallel with other systems that need it.
+* `cmd: Arc<Mutex<Commands>>`: access `Commands` behind a `parking_lot::Mutex`. This allows your systems to run in parallel, but has gotchas:
+  * You can cause a deadlock if you lock the mutex again in a system that already holds the lock.
+  * `Commands` methods that operate on the current entity, like `with` and `current_entity`, break if you release the lock in-between the call to `spawn` and calling them. (bevyengine/bevy#795)
 
 ## Local Resources
 
