@@ -1,4 +1,4 @@
-# Folha de dicas - Bevy Game Engine
+# Folha de dicas para Bevy Game Engine
 
 Folha de dicas concisas para mostrar as sintaxes exatas de recursos comuns e padrões de programação em [Bevy Game Engine](https://github.com/bevyengine/bevy).
 
@@ -8,7 +8,7 @@ Este documento é mantido com grande esforço. Algumas informações podem estar
 
 Ajude a melhorá-lo e mantê-lo atualizado, contribuindo em [GitHub](https://github.com/jamadazi/bevy-cheatsheet).
 
-Se você gosta disso, você também deve dar uma olhada em [Bevy Cookbook](https://github.com/jamadazi/bevy-cookbook).
+Se você gosta disso, você também deve dar uma olhada em [Livro de receitas para Bevy Game Engine](https://github.com/jamadazi/bevy-cookbook).
 
 ## Entidades (Entities)
 
@@ -188,7 +188,7 @@ Isso garante que apenas uma das consultas conflitantes possa ser usada ao mesmo 
 
 ## Detecção de mudança (Change detection)
 
-*Nota de versão (git)*: esta sintaxe foi substituída por [Query Filters](#query-filters).
+*Nota de versão (git)*: esta sintaxe foi substituída por [Query Filters](#filtros-de-consulta-(query-filters)).
 
 Consultas especiais podem ser usadas para verificar se os componentes foram modificados por outros sistemas neste quadro (frame).
 
