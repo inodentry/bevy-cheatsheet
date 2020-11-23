@@ -10,36 +10,36 @@ Ajude a melhorá-lo e mantê-lo atualizado, contribuindo em [GitHub](https://git
 
 Se você gosta disso, você também deve dar uma olhada em [Livro de receitas para Bevy Game Engine](https://github.com/jamadazi/bevy-cookbook).
 
-Tabela de conteúdos
+Tabela de Conteúdos
 =================
 
 - [Folha de dicas para Bevy Game Engine](#folha-de-dicas-para-bevy-game-engine)
-- [Tabela de conteúdos](#tabela-de-conteúdos)
+- [Tabela de Conteúdos](#tabela-de-conteúdos)
 - [Entidades](#entidades-entities)
 - [Componentes](#componentes-components)
 - [Pacotes de Componentes](#pacotes-de-componentes-component-bundles)
 - [Recursos](#recursos-resources)
-- [Inicialização de recursos](#recursos-resources)
+- [Inicialização de Recursos](#recursos-resources)
 - [Sistemas](#sistemas-systems)
 - [Consultas](#consultas-queries)
-- [Consultas conflitantes](#consultas-conflitantes-conflicting-queries)
-- [Detecção de mudança](#detecção-de-mudança-change-detection)
-- [Filtros de consulta](#filtros-de-consulta-query-filters)
+- [Consultas Conflitantes](#consultas-conflitantes-conflicting-queries)
+- [Detecção de Mudança](#detecção-de-mudança-change-detection)
+- [Filtros de Consulta](#filtros-de-consulta-query-filters)
 - [Comandos](#comandos-commands)
 - [Recursos Locais](#recursos-locais-local-resources)
 - [Eventos](#eventos-events)
-- [Inicialização do aplicativo - função principal](#inicialização-do-aplicativo---função-principal-app-initialization---main-function)
+- [Inicialização do Aplicativo - Função Principal](#inicialização-do-aplicativo---função-principal-app-initialization---main-function)
 - [Plugins](#plugins)
 - [Ativos](#ativos-assets)
 - [Entidades Hierárquicas](#entidades-hierárquicas-hierarchical-entities)
-- [Recursos integrados úteis](#recursos-integrados-úteis-useful-built-in-resources)
-- [Recursos de configuração](#recursos-de-configuração-configuration-resources)
-- [Eventos integrados úteis](#eventos-integrados-úteis-useful-built-in-events))
-- [Pacotes de componentes integrados úteis]()
-- [Componentes integrados úteis](#componentes-integrados-úteis-useful-built-in-components)
-- [Tipos de ativos integrados](#tipos-de-ativos-integrados-úteis-useful-built-in-asset-types)
-- [Sistemas integrados úteis](#sistemas-integrados-úteis-useful-built-in-systems)
-- [Truques de sintaxe](#truques-de-sintaxe-syntax-tricks)
+- [Recursos Integrados Úteis](#recursos-integrados-úteis-useful-built-in-resources)
+- [Recursos de Configuração](#recursos-de-configuração-configuration-resources)
+- [Eventos Integrados Úteis](#eventos-integrados-úteis-useful-built-in-events))
+- [Pacotes de Componentes Integrados Úteis]()
+- [Componentes Integrados Úteis](#componentes-integrados-úteis-useful-built-in-components)
+- [Tipos de Ativos Integrados](#tipos-de-ativos-integrados-úteis-useful-built-in-asset-types)
+- [Sistemas Integrados Úteis](#sistemas-integrados-úteis-useful-built-in-systems)
+- [Truques de Sintaxe](#truques-de-sintaxe-syntax-tricks)
 
 ## Entidades (Entities)
 
@@ -89,7 +89,7 @@ Definido como estruturas simples de Rust. Acessado usando os parâmetros `Res`/`
 
 Os recursos são identificados por seu tipo; não pode haver mais de um recurso do mesmo tipo. Se precisar de mais, você pode envolvê-los em estruturas de tipo novo para criar tipos exclusivos.
 
-## Inicialização de recursos (Resource Initialization)
+## Inicialização de Recursos (Resource Initialization)
 
 Você pode inicializar seus recursos com `FromResources`:
 
@@ -184,9 +184,9 @@ fn meu_sistema_complexo(
 }
 ```
 
-*Nota de versão (git)*: A sintaxe para `With` e `Without` mudou. Veja [Filtros de consulta (Query Filters)](#filtros-de-consulta-query-filters).
+*Nota de versão (git)*: A sintaxe para `With` e `Without` mudou. Veja [Filtros de Consulta (Query Filters)](#filtros-de-consulta-query-filters).
 
-## Consultas conflitantes (Conflicting queries)
+## Consultas Conflitantes (Conflicting queries)
 
 Por razões de segurança, um sistema não pode ter várias consultas com conflitos de mutabilidade nos mesmos componentes:
 
@@ -217,9 +217,9 @@ fn meu_sistema(
 
 Isso garante que apenas uma das consultas conflitantes possa ser usada ao mesmo tempo.
 
-## Detecção de mudança (Change detection)
+## Detecção de Mudança (Change detection)
 
-*Nota de versão (git)*: esta sintaxe foi substituída por [Filtros de consulta (Query Filters)](#filtros-de-consulta-query-filters).
+*Nota de versão (git)*: esta sintaxe foi substituída por [Filtros de Consulta (Query Filters)](#filtros-de-consulta-query-filters).
 
 Consultas especiais podem ser usadas para verificar se os componentes foram modificados por outros sistemas neste quadro (frame).
 
@@ -261,9 +261,9 @@ fn sistema_de_mudanca_de_recurso(my_res: ChangedRes<MeuRecurso>) {
 }
 ```
 
-## Filtros de consulta (Query Filters)
+## Filtros de Consulta (Query Filters)
 
-*Nota de versão (v0.3)*: esta sintaxe não está disponível. Veja [Detecção de mudança (Change detection)](#detecção-de-mudança-change-detection) e [Consultas (Queries)](#consultas-queries).
+*Nota de versão (v0.3)*: esta sintaxe não está disponível. Veja [Detecção de Mudança (Change detection)](#detecção-de-mudança-change-detection) e [Consultas (Queries)](#consultas-queries).
 
 O tipo de consulta é, na verdade, `Query<C, F = ()>`, onde `C` são os componentes que você deseja acessar e `F` é um filtro, para aplicar restrições adicionais para selecionar quais entidades devem corresponder.
 
@@ -362,7 +362,7 @@ fn meu_sistema_de_envio(mut eventos: ResMut<Events<MeuEvento>>) {
 
 Os tipos de eventos devem ser registrados ao construir o `App`.
 
-## Inicialização do aplicativo - função principal (App Initialization - main function)
+## Inicialização do Aplicativo - Função Principal (App Initialization - main function)
 
 Para entrar no tempo de execução do Bevy, você deve construir um `App`, registrar quaisquer plug-ins, eventos, recursos e sistemas que você usa e chamar `run()`.
 
@@ -464,14 +464,14 @@ O `GlobalTransform` será gerenciado internamente pelo Bevy.
 
 O `Transform` é sua transformação local. Principalmente para os filhos, mas é relativo ao pai.
 
-## Recursos integrados úteis (Useful built-in resources)
+## Recursos Integrados Úteis (Useful built-in resources)
 
  - `AssetServer`: use para carregar ativos do disco
  - `Input<KeyCode>`, `Input<MouseButton>`: para verificar se as teclas/botões estão pressionados
  - `Time`: tempo delta do quadro e tempo de execução geral
  - `Windows`: parâmetros das janelas abertas, como dimensões...
 
-## Recursos de configuração (Configuration resources)
+## Recursos de Configuração (Configuration resources)
 
 Esses recursos integrados podem ser adicionados ao construir seu `App`, para configurar várias coisas:
 
@@ -481,11 +481,11 @@ Esses recursos integrados podem ser adicionados ao construir seu `App`, para con
 
 Observe que alguns deles devem ser adicionados antes de `DefaultPlugins` para que seus valores tenham efeito.
 
-## Eventos integrados úteis(Useful built-in events)
+## Eventos Integrados Úteis(Useful built-in events)
 
  - Dispositivos de entrada: `KeyboardInput`, `CursorMoved`, `MouseMotion`, `MouseButtonInput`, `MouseWheel`.
 
-## Pacotes de componentes integrados úteis (Useful built-in component bundles)
+## Pacotes de Componentes Integrados Úteis (Useful built-in component bundles)
 
  - `Camera2dComponents`: câmera ortográfica 2D
  - `Camera3dComponents`: câmera 3D em perspectiva
@@ -496,27 +496,27 @@ Observe que alguns deles devem ser adicionados antes de `DefaultPlugins` para qu
  - `TextComponents`: texto da IU
  - `ButtonComponents`: botão da IU
 
-## Componentes integrados úteis (Useful built-in components)
+## Componentes Integrados Úteis (Useful built-in components)
 
  - `Draw`: estado de renderização; defina a visibilidade e habilite a transparência aqui
  - `Transform`: a transformação (posição, rotação, escala) de um objeto no mundo do jogo
  - `TextureAtlasSprite`: o id do sprite em uma spritesheet
  - `Timer`: detecta quando um intervalo de tempo passou; pode estar se repetindo
 
-## Tipos de ativos integrados úteis (Useful built-in asset types)
+## Tipos de Ativos Integrados Úteis (Useful built-in asset types)
 
  - `Font`: fonte para renderizar o texto
  - `Texture`: dados da imagem
  - `TextureAtlas`: spritesheet
  - `Mesh`: geometria 3D
 
-## Sistemas integrados úteis (Useful built-in systems)
+## Sistemas Integrados Úteis (Useful built-in systems)
 
 Sistemas que vêm com o Bevy, mas não são ativados por padrão. Adicione-os ao seu aplicativo, se quiser.
 
  - `bevy::input::system::exit_on_esc_system`: fecha o aplicativo ao pressionar a tecla Esc.
 
-## Truques de sintaxe (Syntax tricks)
+## Truques de Sintaxe (Syntax tricks)
 
 Para contornar as limitações no número de parâmetros, eles podem ser arbitrariamente aninhados em tuplas:
 
