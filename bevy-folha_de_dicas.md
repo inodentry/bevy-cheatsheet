@@ -153,7 +153,7 @@ fn meu_sistema_complexo(
 }
 ```
 
-*Nota de versão (git)*: A sintaxe para `With` e `Without` mudou. Veja [Query Filters](#query-filters).
+*Nota de versão (git)*: A sintaxe para `With` e `Without` mudou. Veja [Filtros de Consulta (Query Filters)](#filtros-de-consulta-query-filters).
 
 ## Consultas conflitantes (Conflicting queries)
 
@@ -188,7 +188,7 @@ Isso garante que apenas uma das consultas conflitantes possa ser usada ao mesmo 
 
 ## Detecção de mudança (Change detection)
 
-*Nota de versão (git)*: esta sintaxe foi substituída por [Query Filters](#filtros-de-consulta-(query-filters)).
+*Nota de versão (git)*: esta sintaxe foi substituída por [Filtros de Consulta (Query Filters)](#filtros-de-consulta-query-filters).
 
 Consultas especiais podem ser usadas para verificar se os componentes foram modificados por outros sistemas neste quadro (frame).
 
@@ -232,7 +232,7 @@ fn sistema_de_mudanca_de_recurso(my_res: ChangedRes<MeuRecurso>) {
 
 ## Filtros de Consulta (Query Filters)
 
-*Nota de versão (v0.3)*: esta sintaxe não está disponível. Veja [Change detection](#change-detection) e [Queries](#queries).
+*Nota de versão (v0.3)*: esta sintaxe não está disponível. Veja [Detecção de mudança (Change detection)](#detecção-de-mudança-change-detection) e [Consultas (Queries)](#consultas-queries).
 
 O tipo de consulta é, na verdade, `Query<C, F = ()>`, onde `C` são os componentes que você deseja acessar e `F` é um filtro, para aplicar restrições adicionais para selecionar quais entidades devem corresponder.
 
@@ -342,7 +342,7 @@ fn main() {
         .add_event::<MeuEvento>()
         // construir um valor para o recurso MeuRecurso1
         .add_resource::<MeuRecurso1>(MeuRecurso1::new())
-        // se implementa `Default` ou` FromResources`
+        // se implementa `Default` ou `FromResources`
         .init_resource::<MeuRecurso2>()
         // é executado uma vez na inicialização, antes dos sistemas normais
         .add_startup_system(meu_sistema_de_setup.system())
@@ -407,7 +407,6 @@ Você também pode adicionar valores diretamente ao armazenamento `Assets<T>` e 
 
 ## Entidades Hierárquicas (Hierarchical Entities)
 
-Entities can be nested into parent/child hierarchies.
 As entidades podem ser aninhadas em hierarquias pai/filho.
 
 ```rust
