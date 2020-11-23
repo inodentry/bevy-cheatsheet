@@ -10,6 +10,37 @@ Ajude a melhorá-lo e mantê-lo atualizado, contribuindo em [GitHub](https://git
 
 Se você gosta disso, você também deve dar uma olhada em [Livro de receitas para Bevy Game Engine](https://github.com/jamadazi/bevy-cookbook).
 
+Tabela de conteúdos
+=================
+
+- [Folha de dicas para Bevy Game Engine](#folha-de-dicas-para-bevy-game-engine)
+- [Tabela de conteúdos](#tabela-de-conteúdos)
+- [Entidades (Entities)](#entidades-entities)
+- [Componentes (Components)](#componentes-components)
+- [Pacotes de Componentes (Component Bundles)](#pacotes-de-componentes-component-bundles)
+- [Recursos (Resources)](#recursos-resources)
+- [Inicialização de recursos (Resource Initialization)](#recursos-resources)
+- [Sistemas (Systems)](#sistemas-systems)
+- [Consultas (Queries)](#consultas-queries)
+- [Consultas conflitantes (Conflicting queries)](#consultas-conflitantes-conflicting-queries)
+- [Detecção de mudança (Change detection)](#detecção-de-mudança-change-detection)
+- [Filtros de consulta (Query Filters)](#filtros-de-consulta-query-filters)
+- [Comandos (Commands)](#comandos-commands)
+- [Recursos Locais (Local Resources)](#recursos-locais-local-resources)
+- [Eventos (Events)](#eventos-events)
+- [Inicialização do aplicativo - função principal (App Initialization - main function)](#inicialização-do-aplicativo---função-principal-app-initialization---main-function)
+- [Plugins](#plugins)
+- [Ativos (Assets)](#ativos-assets)
+- [Entidades Hierárquicas (Hierarchical Entities)](#entidades-hierárquicas-hierarchical-entities)
+- [Recursos integrados úteis (Useful built-in resources)](#recursos-integrados-úteis-useful-built-in-resources)
+- [Recursos de configuração (Configuration resources)](#recursos-de-configuração-configuration-resources)
+- [Eventos integrados úteis(Useful built-in events)](#eventos-integrados-úteis-useful-built-in-events))
+- [Pacotes de componentes integrados úteis (Useful built-in component bundles)]()
+- [Componentes integrados úteis (Useful built-in components)](#componentes-integrados-úteis-useful-built-in-components)
+- [Tipos de ativos integrados úteis (Useful built-in asset types)](#tipos-de-ativos-integrados-úteis-useful-built-in-asset-types)
+- [Sistemas integrados úteis (Useful built-in systems)](#sistemas-integrados-úteis-useful-built-in-systems)
+- [Truques de sintaxe (Syntax tricks)](#truques-de-sintaxe-syntax-tricks)
+
 ## Entidades (Entities)
 
 Conceitualmente, um "objeto" no jogo.
@@ -153,7 +184,7 @@ fn meu_sistema_complexo(
 }
 ```
 
-*Nota de versão (git)*: A sintaxe para `With` e `Without` mudou. Veja [Filtros de Consulta (Query Filters)](#filtros-de-consulta-query-filters).
+*Nota de versão (git)*: A sintaxe para `With` e `Without` mudou. Veja [Filtros de consulta (Query Filters)](#filtros-de-consulta-query-filters).
 
 ## Consultas conflitantes (Conflicting queries)
 
@@ -188,7 +219,7 @@ Isso garante que apenas uma das consultas conflitantes possa ser usada ao mesmo 
 
 ## Detecção de mudança (Change detection)
 
-*Nota de versão (git)*: esta sintaxe foi substituída por [Filtros de Consulta (Query Filters)](#filtros-de-consulta-query-filters).
+*Nota de versão (git)*: esta sintaxe foi substituída por [Filtros de consulta (Query Filters)](#filtros-de-consulta-query-filters).
 
 Consultas especiais podem ser usadas para verificar se os componentes foram modificados por outros sistemas neste quadro (frame).
 
@@ -230,7 +261,7 @@ fn sistema_de_mudanca_de_recurso(my_res: ChangedRes<MeuRecurso>) {
 }
 ```
 
-## Filtros de Consulta (Query Filters)
+## Filtros de consulta (Query Filters)
 
 *Nota de versão (v0.3)*: esta sintaxe não está disponível. Veja [Detecção de mudança (Change detection)](#detecção-de-mudança-change-detection) e [Consultas (Queries)](#consultas-queries).
 
@@ -429,7 +460,6 @@ Os filhos terão um componente `Parent`, que contém o id da entidade do pai.
 
 Para usar transformações com entidades hierárquicas, você deve adicionar um componente `GlobalTransform` e um componente `Transform`.
 
-The `GlobalTransform` will be managed by bevy internally.
 O `GlobalTransform` será gerenciado internamente pelo Bevy.
 
 O `Transform` é sua transformação local. Principalmente para os filhos, mas é relativo ao pai.
@@ -451,7 +481,7 @@ Esses recursos integrados podem ser adicionados ao construir seu `App`, para con
 
 Observe que alguns deles devem ser adicionados antes de `DefaultPlugins` para que seus valores tenham efeito.
 
-## Useful built-in events
+## Eventos integrados úteis(Useful built-in events)
 
  - Dispositivos de entrada: `KeyboardInput`, `CursorMoved`, `MouseMotion`, `MouseButtonInput`, `MouseWheel`.
 
