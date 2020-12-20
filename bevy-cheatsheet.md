@@ -100,10 +100,6 @@ Used to operate on game state by accessing components and resources.
 
 They need to be registered at `App` creation time. 
 
-*Note (v0.3)*: Bevy requires a specific ordering for the `fn` arguments: `Commands` first, followed by resources, followed by queries last.
-
-*Note (git)*: The ordering requirement has been removed. System parameters can be in any order now.
-
 ## Queries
 
 Queries allow you to operate on entities with a given set of components.
@@ -116,24 +112,13 @@ You can also use `Option` as an adapter to get a component if it exists.
 
 ```rust
 fn my_complex_system(
-    // resources must come before queries
-    r1: Res<MyRes>,
-    mut r2: ResMut<MyOtherRes>,
-
-    // queries must be defined as `mut`, even if the components themselves are not
-    mut q1: Query<(&mut ComponentA, &ComponentB)>,
+    q1: Query<(&mut ComponentA, &ComponentB)>,
 
     // use `Entity` to get the entity ID
-    mut q2: Query<(Entity, &mut ComponentC)>,
+    q2: Query<(Entity, &mut ComponentC)>,
 
-    // only get entities that have a `Foo` component
-    mut q3: Query<With<Foo, (&Bar, &mut Baz)>>,
-
-    // only get entities without a `Abc` component
-    mut q4: Query<Without<Abc, (&mut Def, Entity)>>,
-
-    // optionally get access to `Cde` if it exists on entities that have `Bcd`
-    mut q5: Query<(&Bcd, Option<&mut Cde>)>,
+    // optionally get mut access to `Cde` if it exists on entities that have `Bcd`
+    q5: Query<(&Bcd, Option<&mut Cde>)>,
 ) {
     // iterate over all matching entities
     for (mut a, b) in q1.iter_mut() {
@@ -142,8 +127,8 @@ fn my_complex_system(
     }
 
     // or query just one specific entity
-    if let Ok((bar, mut baz)) = q3.get(my_entity) {
-        // do stuff with my_entity's Bar and Baz
+    if let Ok((mut a, b)) = q1.get(my_entity) {
+        // do stuff with the components
     }
 
     // or just one component of a specific entity
@@ -152,8 +137,6 @@ fn my_complex_system(
     }
 }
 ```
-
-*Note (git)*: The syntax for `With` and `Without` has changed. See [Query Filters](#query-filters).
 
 ## Conflicting queries
 
@@ -224,11 +207,12 @@ fn res_changed_system(my_res: ChangedRes<MyRes>) {
 
 ## Query Filters
 
-*Note (v0.3)*: this syntax is not available. See [Change detection](#change-detection) and [Queries](#queries) instead.
+Query types can optionally include filters, to apply additional restrictions to select what entities should match.
 
-The query type is actually `Query<C, F = ()>`, where `C` are the components you want to access, and `F` is a filter, to apply additional restrictions to select what entities should match.
+The available filters are: `With`, `Without`, `Mutated`, `Added`, `Changed`.
 
-Use tuples to access multiple components and to apply multiple filters.
+Multiple filters can be combined with a tuple to apply all of them (AND logic),
+but also using the `Or<...>` wrapper to match on any of them (OR logic).
 
 Examples:
 
@@ -250,10 +234,8 @@ Query<(&DataA, &mut DataB, &DataC)>
 
 Spawn and despawn entities, add/remove components, insert resources, using `Commands`.
 
-*Note (v0.3)*: Must be the first argument of the `fn`.
-
 ```rust
-fn manager_system(mut cmd: Commands, data: Res<MyRes>, mut q: Query<(Entity, &Stuff)>) {
+fn manager_system(mut cmd: &mut Commands, data: Res<MyRes>, mut q: Query<(Entity, &Stuff)>) {
     // spawn an entity; takes a component bundle
     cmd.spawn(MyComponentsAbc {
         a: ComponentA::new(),
@@ -275,14 +257,9 @@ fn manager_system(mut cmd: Commands, data: Res<MyRes>, mut q: Query<(Entity, &St
 }
 ```
 
-*Note (v0.3)*: The parameter type is `mut cmd: Commands`, as in the example above.
-
-*Note (git)*: The parameter type has changed, you now have two options:
-
-* `cmd: &mut Commands`: access `Commands` directly, but prevents your system from running in parallel with other systems that need it.
-* `cmd: Arc<Mutex<Commands>>`: access `Commands` behind a `parking_lot::Mutex`. This allows your systems to run in parallel, but has gotchas:
-  * You can cause a deadlock if you lock the mutex again in a system that already holds the lock.
-  * `Commands` methods that operate on the current entity, like `with` and `current_entity`, break if you release the lock in-between the call to `spawn` and calling them. (bevyengine/bevy#795)
+*Note*: Systems that take `&mut Commands` cannot be run in parallel. Alternatively, you can use `Arc<Mutex<Commands>>`, but it has gotchas:
+* You can cause a deadlock if you lock the mutex again in a system that already holds the lock.
+* `Commands` methods that operate on the current entity, like `with` and `current_entity`, break if you release the lock in-between the call to `spawn` and calling them. (bevyengine/bevy#795)
 
 ## Local Resources
 
@@ -292,7 +269,7 @@ You can have per-system data using `Local<T>`.
 fn my_system(data: Local<MyData>) { }
 ```
 
-`T` must implement `Default` or `FromResources`, as it needs to be automatically initialized.
+The resource type must implement `Default` or `FromResources`, as it needs to be automatically initialized.
 
 If the same type is used in multiple systems, they will each get their own instance.
 
