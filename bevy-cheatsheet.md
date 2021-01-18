@@ -2,7 +2,7 @@
 
 Concise cheat sheet to show the exact syntax for common features and programming patterns in the [Bevy game engine](https://github.com/bevyengine/bevy).
 
-Primarily covers the current bevy release (v0.3), but new changes in the latest version (git) are also noted where applicable.
+Primarily covers the current bevy release (v0.4), but new changes in the latest version (git) are also noted where applicable.
 
 This document is maintained on a best-effort basis. Some information may be out of date.
 
@@ -106,8 +106,6 @@ Queries allow you to operate on entities with a given set of components.
 
 You can get mutable/immutable access to specific components.
 
-You can filter based on presence/absence of a component type, using `With<T, ...>`/`Without<T, ...>`.
-
 You can also use `Option` as an adapter to get a component if it exists.
 
 ```rust
@@ -138,73 +136,6 @@ fn my_complex_system(
 }
 ```
 
-## Conflicting queries
-
-For safety reasons, a system cannot have multiple queries with mutability conflicts on the same components:
-
-```rust
-// disallowed (will fail to compile): because both queries want `&mut ComponentA`
-fn my_system(mut q1: Query<(&mut ComponentA, &ComponentB)>, mut q2: Query<(&mut ComponentA, &ComponentB)>)
-```
-
-The solution is to wrap them in a `QuerySet`:
-
-```rust
-fn my_system(mut qs: QuerySet<(Query<(&mut ComponentA, &ComponentB)>, Query<(&mut ComponentA, &ComponentB)>)>) {
-    for a in qs.q0_mut().iter_mut() {
-    }
-
-    for (a, b) in qs.q1_mut().iter_mut() {
-    }
-}
-```
-
-This ensures that only one of the conflicting queries can be used at the same time.
-
-## Change detection
-
-*Note (git)*: this syntax has been replaced with [Query Filters](#query-filters).
-
-Special queries can be used to check if components have been modified by other systems this frame.
-
-Note that the various types of change detection only allow for immutable access.
-
-```rust
-fn change_tracking_system(
-    // only entities whose `Qux` component was mutated by another system this frame
-    mut q1: Query<(Mutated<Qux>, &OtherData)>,
-    // only entities whose `Thing` component was freshly added
-    mut q2: Query<(Added<Thing>, &OtherData)>,
-    // either added or mutated
-    mut q3: Query<(Changed<Stuff>, &OtherData)>,
-) {
-    // to detect removals, use this method (there is no query type for removed)
-    for entity in q3.removed::<AnotherComponent>() {
-        // do something with each `q3` entity that lost its `AnotherComponent`
-    }
-}
-```
-
-To watch for changes on multiple components:
-
-```rust
-// all of them (logical AND)
-Query<(Mutated<Abc>, Mutated<Bcd>)>
-// any of them (logical OR)
-Query<Or<(Mutated<Cde>, Mutated<Def>)>>
-// complex
-Query<(Mutated<Foo>, Or<(Mutated<Xy>, Mutated<Yx>)>)>
-```
-
-Resources also have basic change detection using `ChangedRes<T>`:
-
-```rust
-// the whole system only runs if the resource was changed
-fn res_changed_system(my_res: ChangedRes<MyRes>) {
-    eprintln!("Resource changed to {:?}", *my_res);
-}
-```
-
 ## Query Filters
 
 Query types can optionally include filters, to apply additional restrictions to select what entities should match.
@@ -229,6 +160,40 @@ Query<&mut Abc, Or<With<Def>, With<Fed>>>
 // regular query with no filter (the filter arg is optional)
 Query<(&DataA, &mut DataB, &DataC)>
 ```
+
+## Resource Change detection
+
+Resources have basic change detection using `ChangedRes<T>`:
+
+```rust
+// the whole system only runs if the resource was changed
+fn res_changed_system(my_res: ChangedRes<MyRes>) {
+    eprintln!("Resource changed to {:?}", *my_res);
+}
+```
+
+## Conflicting queries
+
+For safety reasons, a system cannot have multiple queries with mutability conflicts on the same components:
+
+```rust
+// disallowed (will fail to compile): because both queries want `&mut ComponentA`
+fn my_system(mut q1: Query<(&mut ComponentA, &ComponentB)>, mut q2: Query<(&mut ComponentA, &ComponentB)>)
+```
+
+The solution is to wrap them in a `QuerySet`:
+
+```rust
+fn my_system(mut qs: QuerySet<(Query<(&mut ComponentA, &ComponentB)>, Query<(&mut ComponentA, &ComponentB)>)>) {
+    for a in qs.q0_mut().iter_mut() {
+    }
+
+    for (a, b) in qs.q1_mut().iter_mut() {
+    }
+}
+```
+
+This ensures that only one of the conflicting queries can be used at the same time.
 
 ## Commands
 
