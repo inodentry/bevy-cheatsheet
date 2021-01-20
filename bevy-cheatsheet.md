@@ -242,9 +242,11 @@ If the same type is used in multiple systems, they will each get their own insta
 
 Send notifications between systems. Accessed using a `Events<T>` resource.
 
-To receive, you need an `EventReader<T>`. It tracks the events processed. It's nice to have it as a `Local` resource.
+To receive, you need an `EventReader<T>`. It tracks the events processed.
 
 Events don't persist. If receivers don't handle them every frame, they will be lost.
+
+*Note (bevy 0.4)*: It's convenient to use a `Local` resource for reading events. See the example below.
 
 ```rust
 struct MyEvent;
@@ -257,6 +259,17 @@ fn my_recv_system(events: Res<Events<MyEvent>>, mut reader: Local<EventReader<My
 
 fn my_send_system(mut events: ResMut<Events<MyEvent>>) {
     events.send(MyEvent);
+}
+```
+
+*Note (bevy git)*: `EventReader` is now a system parameter, so use it directly instead of putting it in a resource. Also, you no longer need the `Res<Events<T>>` to receive events:
+
+```rust
+// this version is for latest git bevy
+fn my_recv_system(mut reader: EventReader<MyEvent>) {
+    for ev in reader.iter() {
+        // handle ev
+    }
 }
 ```
 
